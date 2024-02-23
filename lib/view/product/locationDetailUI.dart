@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:travel/API/generalAPI.dart';
 import 'package:travel/view/map.dart';
+import 'package:travel/view/weather/WeatherHome.dart';
 // import '../../controller/tourController.dart';
 import '../../model/Ticket.dart';
 import '../../config/color.dart';
@@ -277,16 +278,19 @@ class LocationDetailsState extends State<LocationDetailsUI> {
               ),
               child: InkWell(
                 onTap: () {
-                  setState(() {
-                    if (wish) {
-                      wish = false;
-                    } else {
-                      wish = true;
-                    }
-                  });
+                  showWeather(object.latitude, object.longitude);
+                  //wishlist
+                  // setState(() {
+                  //   if (wish) {
+                  //     wish = false;
+                  //   } else {
+                  //     wish = true;
+                  //   }
+                  // });
                 },
                 child: Icon(
-                  wish == false ? Icons.favorite_border : Icons.favorite,
+                  // wish == false ? Icons.favorite_border : Icons.favorite,
+                  Icons.cloud_outlined,
                   size: 30,
                   color: primaryColor,
                 ),
@@ -394,6 +398,19 @@ class LocationDetailsState extends State<LocationDetailsUI> {
             height: MediaQuery.of(context).size.height * 0.8,
             width: MediaQuery.of(context).size.width * 0.92,
             child: MapsUI(latitude: lat, longitude: long),
+          );
+        });
+  }
+
+  showWeather(lat, long) {
+    print("---------------------------------------1");
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return Container(
+            height: MediaQuery.of(context).size.height * 0.8,
+            width: MediaQuery.of(context).size.width * 0.92,
+            child: WeatherHome(latitude: lat, longitude: long),
           );
         });
   }

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:geolocator/geolocator.dart';
 import 'package:location/location.dart';
 import 'package:path/path.dart' as path;
 import 'package:geolocator/geolocator.dart' as geolocator;
@@ -44,7 +45,7 @@ class GeneralAPI {
     return list;
   }
 
-  //get current location
+  //get current location - request position when first
   static double currentLongitude = 0;
   static double currentLatitude = 0;
   static Future<void> setCurrentLocation() async {
@@ -96,6 +97,30 @@ class GeneralAPI {
       }
     }
     return nearests;
+  }
+
+  //show request position
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+    return await Geolocator.getCurrentPosition();
   }
 
   // static Future<List<dynamic>> getRegionItem(String type, String id) async {

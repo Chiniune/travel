@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:travel/view/home/homeTop.dart';
 import 'package:travel/view/map.dart';
+import 'package:travel/view/weather/WeatherHome.dart';
 import 'view/login/loginUI.dart';
 import 'view/home/testsenAPI.dart';
 
